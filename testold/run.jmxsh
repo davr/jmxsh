@@ -1,0 +1,38 @@
+puts "Now where are running it."
+puts "argv0: $argv0"
+puts "argv: $argv"
+puts "argc: $argc"
+
+foreach item $argv {
+	puts "Arg: $item"
+}
+
+set server "foo"
+set mbean "DefaultDomain:type=SimpleStandard"
+
+puts "Original Int: [jmx_get -s $server -m $mbean Int]"
+puts "Original State: [jmx_get -s $server -m $mbean State]"
+
+jmx_set -s $server -m $mbean Int 20
+puts "New Int: [jmx_get -s $server -m $mbean Int]"
+
+puts "Number of changes: [jmx_get -s $server -m $mbean NbChanges]"
+
+jmx_set -s $server -m $mbean State "Here's your new state"
+puts "New state: [jmx_get -s $server -m $mbean State]"
+
+puts "Number of changes: [jmx_get -s $server -m $mbean NbChanges]"
+
+puts "Current state: [jmx_invoke -s $server -m $mbean currentState]"
+
+puts "Invoking reset."
+jmx_invoke -s $server -m $mbean reset
+
+puts "Current state: [jmx_invoke -s $server -m $mbean currentState]"
+
+puts "Current NbChange: [jmx_get -s $server -m $mbean NbChanges]"
+puts "Current Int: [jmx_get -s $server -m $mbean Int]"
+puts "Current State: [jmx_get -s $server -m $mbean State]"
+
+#set result [jmx_invoke -s $server -m $mbean [list currentState java.lang.Integer] 35]
+#puts "Result: $result"

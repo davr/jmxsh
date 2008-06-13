@@ -1,0 +1,25 @@
+set MBEAN DefaultDomain:type=SimpleStandard
+
+puts "Integer is: [jmx_get -m $MBEAN Int]"
+puts "Number of state changes is: [jmx_get -m $MBEAN NbChanges]"
+puts "Current State is: [jmx_get -m $MBEAN State]"
+
+puts [jmx_invoke -m $MBEAN currentState]
+
+jmx_set -m $MBEAN Int 555
+jmx_set -m $MBEAN State "NewJersey"
+
+puts [jmx_invoke -m $MBEAN currentState]
+
+puts "Resetting..."
+
+jmx_invoke -m $MBEAN reset
+jmx_set -m $MBEAN Int 100
+
+puts ""
+
+puts "Integer is: [jmx_get -m $MBEAN Int]"
+puts "Number of state changes is: [jmx_get -m $MBEAN NbChanges]"
+puts "Current State is: [jmx_get -m $MBEAN State]"
+
+puts [jmx_invoke -m $MBEAN currentState]

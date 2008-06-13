@@ -1,0 +1,75 @@
+<project name="jmxsh2" default="app">
+
+  <import file="one-jar-ant-task.xml"/>
+
+  <property name="src"      location="src"/>
+  <property name="lib"      location="lib"/>
+  <property name="build"    location="build"/>   
+  <property name="binlib"   location="binlib"/>
+  <property name="classes"  location="${build}/classes"/>   
+  <property name="test"     location="${build}/test"/>   
+  <property name="doc"      location="${build}/doc"/>   
+  <property name="blib"     location="${build}/lib"/>
+
+  <path id="classpath.path">
+    <fileset dir="${lib}"> <include name="**/*.jar"/> </fileset>
+    <pathelement location="${classes}"/>
+  </path>
+
+  <target name="init">
+    <mkdir dir="${build}"/>   
+    <mkdir dir="${classes}"/>
+    <mkdir dir="${test}"/>
+    <mkdir dir="${doc}"/>
+    <mkdir dir="${blib}"/>
+    <mkdir dir="${bbinlib}"/>
+  </target>   
+
+  <target name="clean">
+    <delete dir="${build}"/>
+  </target>
+  
+  <target name="compile" depends="init">
+    <javac srcdir="${src}" 
+	   destdir="${classes}" 
+	   classpathref="classpath.path" 
+	   debug="on">
+      <compilerarg value="-Xlint:unchecked"/>
+    </javac>
+  </target>
+
+  <target name="copy" depends="init">
+    <copy todir="${blib}">
+      <fileset dir="${lib}"> 
+	<exclude name="one-jar-ant-task-0.96.jar"/> 
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="test" depends="compile">
+  </target>
+
+  <target name="dist" depends="test">
+  </target>
+
+  <target name="javadoc" depends="app">
+    <javadoc destdir="${doc}" classpathref="classpath.path">
+      <packageset dir="src" defaultexcludes="yes">
+	<include name="com/aol/ieg/jmxsh/**"/>
+      </packageset>
+    </javadoc>
+  </target>
+
+  <target name="app" depends="copy,compile,test,dist,init">
+    <one-jar destfile="jmxsh.jar" manifest="jmxsh.mf">
+      <main> <fileset dir="${classes}"/> </main>
+      <lib> <fileset dir="${blib}"/> </lib>
+      <fileset dir=".">
+        <include name="LICENSE*"/>
+        <include name="NOTICE"/>
+        <include name="README"/>
+      </fileset>
+    </one-jar>
+  </target>
+  
+</project>

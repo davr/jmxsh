@@ -1,0 +1,12 @@
+This software includes the following components from the Apache Software Foundation, also
+released under the Apache Software License Version 2.0:
+
+ commons-cli-1.1.jar
+ jakarta-oro-2.0.8.jar
+ log4j-1.2.15.jar
+
+The following components are covered under different licenses:
+
+ jline-0.9.94.jar (LICENSE-JLINE)
+ One-Jar (LICENSE-ONEJAR)
+ Java/Tcl v1.3.3 (LICENSE-TCLJAVA,-2,-3,-4)

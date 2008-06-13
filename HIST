@@ -1,0 +1,4 @@
+jmxsh2.0 -- Lots of refactoring.  tclsh, readline, command-line parsing.
+jmxsh2.1 -- Added rudimentary menus, navigation to mbean.  Started on invoke, but stopped.
+jmxsh2.6 -- Multi-server, browser broken.
+jmxsh2.7 -- Browser fixed.
