@@ -153,7 +153,7 @@ class GetCmd implements Command {
 		throw new TclException(interp, "No mbean specified; please set MBEAN variable or use -m option.", TCL.ERROR);
 	    }
 
-	    if (this.attrop == null) {
+	    if (attribute == null) {
 		throw new TclException(interp, "No attribute specified; please set ATTROP variable or add it to the command line.", TCL.ERROR);
 	    }
 
