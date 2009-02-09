@@ -135,7 +135,7 @@ class SetCmd implements Command {
 		throw new TclException(interp, "No mbean specified; please set MBEAN variable or use -m option.", TCL.ERROR);
 	    }
 
-	    if (attrop == null) {
+	    if (attribute == null) {
 		throw new TclException(interp, "No attribute specified; please set ATTROP variable or add it to the command line.", TCL.ERROR);
 	    }
 
@@ -149,7 +149,7 @@ class SetCmd implements Command {
 	    throw new TclException(interp, e.getMessage(), 1);
 	}
         catch(RuntimeException e) {
-	    throw new TclException(interp, "Cannot convert result to a string.", 1);
+	    throw new TclException(interp, e.getMessage(), 1);
 	}
     }
 
