@@ -126,6 +126,7 @@ class JInterp extends Interp {
 	createCommand("jmx_invoke", InvokeCmd.getInstance());
 	createCommand("jmx_connect", ConnectCmd.getInstance());
 	createCommand("jmx_close", CloseCmd.instance);
+	createCommand("jmx_list", ListCmd.getInstance());
     }
 
 }

@@ -29,6 +29,26 @@ import tcl.lang.*;
 class Utils {
 
     /**
+       Create a tcl list given a Java array of Strings.
+
+       @interp  The interpreter to create it in.
+    */
+    static public TclObject array2list(String[] array) {
+	try {
+	    TclObject result = TclList.newInstance();
+	    for (String element : array) {
+		TclList.append(JInterp.instance, result, TclString.newInstance(element));
+	    }
+	    return result;
+	}
+	catch (TclException e) {
+	    throw new IllegalArgumentException("Error converting String array to tcl list.");
+	}
+    }
+    
+
+
+    /**
        Create a Jacl java object reference.
 
        @interp  The interpreter to create it in.

@@ -54,18 +54,29 @@ class Jmx {
     }
 
 
-    public String[] getDomains(String server) {
+    public String[] getDomains(String server, String regex) {
 	try {
-	    String[] result = getMBSC(server).getDomains();
-	    if (result == null) {
-		result = EMPTY_STRING_ARRAY;
+	    Vector<String> result = new Vector<String>();
+	    String[] domains = getMBSC(server).getDomains();
+	    if (domains == null) {
+		domains = EMPTY_STRING_ARRAY;
 	    }
-	    return result;
+	    for (String domain : domains) {
+		if (regex.length() == 0 || domain.matches(regex)) {
+		    result.add(domain);
+		}
+	    }
+	    return result.toArray(EMPTY_STRING_ARRAY);
 	}
 	catch (IOException e) {
 	    logger.error("Error getting domains.", e);
 	    throw new IllegalArgumentException("Unable to get domains for " + server + ".", e);
 	}
+    }
+
+
+    public String[] getDomains(String server) {
+	return getDomains(server, ".*");
     }
 
     public void close(String server) {
@@ -81,21 +92,27 @@ class Jmx {
     }
 
     
-    public String[] getMBeans(String server, String domain) {
+    public String[] getMBeans(String server, String domain, String regex) {
 	try {
 	    ObjectName wildcardQuery = getObjectName(domain + ":*");
 	    Set<?> mbeans = getMBSC(server).queryNames(wildcardQuery, null);
-	    String[] names = new String[mbeans.size()];
-	    int i=0;
+	    Vector<String> result = new Vector<String>();
 	    for (Object mbean : mbeans) {
-		names[i++] = ((ObjectName) mbean).toString();
+		String name = ((ObjectName) mbean).toString();
+		if (regex.length() == 0 || name.matches(regex)) {
+		    result.add(name);
+		}
 	    }
-	    return names;
+	    return result.toArray(EMPTY_STRING_ARRAY);
 	}
 	catch (IOException e) {
 	    logger.error("Error getting mbeans.", e);
 	    throw new IllegalArgumentException("Error getting mbeans.");
 	}
+    }
+
+    public String[] getMBeans(String server, String domain) {
+	return getMBeans(server, domain, ".*");
     }
 
     public MBeanOperationInfo getOperationInfo(String server, String mbean, String opname) {
