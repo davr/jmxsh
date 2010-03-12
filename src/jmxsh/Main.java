@@ -217,7 +217,7 @@ public final class Main {
         String server = commandLine.getOptionValue("server");
         String host = commandLine.getOptionValue("host");
         String protocol = commandLine.getOptionValue("protocol", "rmi");
-        String path = commandLine.getOptionValue("path");
+        String path = commandLine.getOptionValue("url_path");
         String user = commandLine.getOptionValue("user");
         String password = commandLine.getOptionValue("password");
         int port = Integer.parseInt(commandLine.getOptionValue("port"));
