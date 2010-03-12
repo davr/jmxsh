@@ -125,6 +125,7 @@ class ShellMode extends Mode {
 	sb.append("o  jmx_set     - change a JMX attribute\n");
 	sb.append("o  jmx_get     - read a JMX attribute\n");
 	sb.append("o  jmx_invoke  - invoke a JMX operation\n");
+	sb.append("o  jmx_list    - list attribs w/regex (NOT TESTED)\n");
 	sb.append("\n");
 	sb.append("To get further help on each command, invoke it with the\n");
 	sb.append("-? option.\n");
