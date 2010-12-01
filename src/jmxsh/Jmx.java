@@ -329,7 +329,10 @@ class Jmx {
 		JMXServiceURL url = new JMXServiceURL(urlStr);
 		connect(url, user, password);
 	    }
-	    else {
+	    else if(protocol.equals("custom")) {
+		JMXServiceURL url = new JMXServiceURL(host);
+		connect(url, user, password);
+	    }else {
 		JMXServiceURL url = new JMXServiceURL(protocol, host, port, path);
 		connect(url, user, password);
 	    }
