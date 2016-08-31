@@ -54,6 +54,13 @@ public final class Main {
         Options opts = new Options();
 
         opts.addOption(
+            OptionBuilder.withLongOpt("ssl")
+                .withDescription("Enable SSL.")
+                .hasArg(false)
+                .create("S")
+        );
+
+        opts.addOption(
             OptionBuilder.withLongOpt("server")
                 .withDescription("JMX Service URL of remote JMX service.")
                 .withArgName("SERVER")
@@ -218,6 +225,7 @@ public final class Main {
         String host = commandLine.getOptionValue("host");
         String protocol = commandLine.getOptionValue("protocol", "rmi");
         String path = commandLine.getOptionValue("url_path");
+        Boolean ssl = commandLine.hasOption("ssl");
         String user = commandLine.getOptionValue("user");
         String password = commandLine.getOptionValue("password");
         int port = Integer.parseInt(commandLine.getOptionValue("port"));
@@ -232,10 +240,10 @@ public final class Main {
             }
 
             if (server == null) {
-                Jmx.getInstance().connect(host, port, protocol, path, user, password);
+                Jmx.getInstance().connect(host, port, protocol, ssl, path, user, password);
             }
             else {
-                Jmx.getInstance().connect(server, user, password);
+                Jmx.getInstance().connect(server, ssl, user, password);
             }
             BrowseMode.instance.setDomainMenuLevel();
         }
