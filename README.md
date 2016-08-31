@@ -119,11 +119,19 @@ If you like to point and laugh at things, you can also get the source code at ht
 
 ## How do I use SSL?
 
-Heh, very carefully?  This is also under construction.
+If your remote JMX server is protected with SSL, you'll need to do the following:
 
-The biggest hurdle in SSL is making sure you have a valid pair of certificates--a private one for the server, and a public one for jmxsh.
+* Provide the `--ssl` option to jmxsh
+* Specify the appropriate trustStore and trustStore password
+* (if SSL client auth is required) specify a keyStore and keyStore password
 
-After that, it's all in setting up the System Properties correctly.
+Here is an example using SSL client auth:
+
+    java -Djavax.net.ssl.keyStore=jmx-client.jks -Djavax.net.ssl.keyStorePassword=<very-secure> -Djavax.net.ssl.trustStore=jmx-server-trust.jks -Djavax.net.ssl.trustStorePassword=<very-secure> -jar jmxsh.jar -h localhost -p 1099 --ssl
+
+Here is an example without SSL client auth:
+
+    java -Djavax.net.ssl.trustStore=jmx-server-trust.jks -Djavax.net.ssl.trustStorePassword=<very-secure> -jar jmxsh.jar -h localhost -p 1099 --ssl
 
 # Release History
 
