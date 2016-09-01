@@ -28,6 +28,7 @@ import java.io.*;
 import java.net.*;
 import javax.management.*;
 import javax.management.remote.*;
+import javax.rmi.ssl.SslRMIClientSocketFactory;
 import org.apache.log4j.*;
 
 /** Facade for Jmx commands. */
@@ -315,6 +316,7 @@ class Jmx {
 	String host, 
 	int port, 
 	String protocol, 
+	Boolean ssl,
 	String pathIn, 
 	String user, 
 	String password
@@ -327,14 +329,14 @@ class Jmx {
 		}
 		String urlStr = "service:jmx:rmi:///jndi/rmi://" + host + ":" + port + "/" + path;
 		JMXServiceURL url = new JMXServiceURL(urlStr);
-		connect(url, user, password);
+		connect(url, ssl, user, password);
 	    }
 	    else if(protocol.equals("custom")) {
 		JMXServiceURL url = new JMXServiceURL(host);
-		connect(url, user, password);
+		connect(url, ssl, user, password);
 	    }else {
 		JMXServiceURL url = new JMXServiceURL(protocol, host, port, path);
-		connect(url, user, password);
+		connect(url, ssl, user, password);
 	    }
 	}
 	catch (MalformedURLException e) {
@@ -346,12 +348,13 @@ class Jmx {
 
     public void connect (
 	String urlStr, 
+	Boolean ssl,
 	String user, 
 	String password
     ) {
 	try {
 	    JMXServiceURL url = new JMXServiceURL(urlStr);
-	    connect(url, user, password);
+	    connect(url, ssl, user, password);
 	}
 	catch (MalformedURLException e) {
 	    logger.error("Error creating JMX Service URL.", e);
@@ -362,10 +365,11 @@ class Jmx {
 
     public void connect (
 	JMXServiceURL url,
+	Boolean ssl,
 	String user, 
 	String password
     ) {
-	Map<String, String[]> credentials = null;
+	Map<String, Object> env = new HashMap<String, Object>();
 	JMXConnector connector = this.connectors.get(url.toString());
 
 	if (connector != null) {
@@ -377,12 +381,14 @@ class Jmx {
 
 	try {
 	    if (user != null) {
-		credentials = new HashMap<String, String[]>();
-		credentials.put(JMXConnector.CREDENTIALS, new String[] { user, password });
+		env.put(JMXConnector.CREDENTIALS, new String[] { user, password });
  	    }
+            if (ssl) {
+                env.put("com.sun.jndi.rmi.factory.socket", new SslRMIClientSocketFactory());
+            }
 
 	    String urlStr = url.toString();
-	    connector = JMXConnectorFactory.connect(url, credentials);
+	    connector = JMXConnectorFactory.connect(url, env);
 	    this.connectors.put(urlStr, connector);
 	    JInterp.setGlobal("SERVER", urlStr);
 	    JInterp.setGlobal("SERVERS", urlStr, urlStr);
